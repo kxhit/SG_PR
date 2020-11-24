@@ -1,3 +1,0 @@
-192xN
-
-np.fromfile("00_M2DP.bin").reshape(192,-1)

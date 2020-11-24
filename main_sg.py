@@ -24,4 +24,4 @@ if __name__ == "__main__":
 
 # bash command
 
-# python main_sg.py --p_thresh 10 --graph_pairs_dir /media/work/data/kitti/odometry/semantic-kitti/10_20/graph_pairs_sem_10_20_ds --logdir 10_20/log_10_20_fold00 --fold 00
+# python main_sg.py ./config/config.yml

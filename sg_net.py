@@ -17,7 +17,6 @@ import torch.nn as nn
 from collections import OrderedDict
 from sklearn import metrics
 
-NODE_NUM = 100 # TODO 100
 
 class SG(torch.nn.Module):
     """
@@ -46,17 +45,12 @@ class SG(torch.nn.Module):
         Creating the layers.
         """
         self.calculate_bottleneck_features()
-        # self.convolution_1 = GCNConv(self.number_labels, self.args.filters_1)   # x [num_nodes, num_node_features]; edge_index[2, num_edges];edge_attr [num_edges, num_edge_features]
-        # self.convolution_2 = GCNConv(self.args.filters_1, self.args.filters_2)
-        # self.convolution_3 = GCNConv(self.args.filters_2, self.args.filters_3)
         self.attention = AttentionModule(self.args)
         self.tensor_network = TenorNetworkModule(self.args)
         self.fully_connected_first = torch.nn.Linear(self.feature_count, self.args.bottle_neck_neurons)
         self.scoring_layer = torch.nn.Linear(self.args.bottle_neck_neurons, 1)
         bias_bool = False # TODO
         self.dgcnn_s_conv1 = nn.Sequential(
-            # add bn for input
-            # nn.BatchNorm2d((self.number_labels + 3)*2), #TODO
             nn.Conv2d(3*2, self.args.filters_1, kernel_size=1, bias=bias_bool),
             nn.BatchNorm2d(self.args.filters_1),
             nn.LeakyReLU(negative_slope=0.2))
@@ -80,30 +74,10 @@ class SG(torch.nn.Module):
             nn.Conv2d(self.args.filters_2 * 2, self.args.filters_3, kernel_size=1, bias=bias_bool),
             nn.BatchNorm2d(self.args.filters_3),
             nn.LeakyReLU(negative_slope=0.2))
-        # self.dropout = torch.nn.Dropout2d(p=self.args.dropout)
-        # self.emb_dims = self.args.filters_1+self.args.filters_2+self.args.filters_3
-        # self.dgcnn_conv_all = nn.Sequential(nn.Conv1d(self.emb_dims,
-        #                                               self.emb_dims, kernel_size=1, bias=bias_bool),
-        #                                     nn.BatchNorm1d(self.emb_dims), nn.LeakyReLU(negative_slope=0.2))
         self.dgcnn_conv_end = nn.Sequential(nn.Conv1d(self.args.filters_3 * 2,
                                                       self.args.filters_3, kernel_size=1, bias=bias_bool),
                                             nn.BatchNorm1d(self.args.filters_3), nn.LeakyReLU(negative_slope=0.2))
 
-    def convolutional_pass(self, edge_index, features, weights=None):
-        """
-        Making convolutional pass.
-        :param edge_index: Edge indices.
-        :param features: Feature matrix.
-        :return features: Absstract feature matrix.
-        """
-        features = self.convolution_1(features, edge_index, weights)
-        features = torch.nn.functional.relu(features)
-        features = torch.nn.functional.dropout(features, p=self.args.dropout, training=self.training)
-        # features = self.convolution_2(features, edge_index, weights)
-        # features = torch.nn.functional.relu(features)
-        # features = torch.nn.functional.dropout(features, p=self.args.dropout, training=self.training)
-        # features = self.convolution_3(features, edge_index, weights) # TODO: GCN-3
-        return features
 
     def dgcnn_conv_pass(self, x):
         self.k = 10 # TODO
@@ -192,7 +166,6 @@ class SGTrainer(object):
         Creating a SG Net.
         """
         self.model = SG(self.args, self.number_of_labels)
-        # self.model = torch.nn.DataParallel(self.model)
 
         if self.model_pth != "":
             print("loading model: ", self.model_pth)
@@ -205,12 +178,8 @@ class SGTrainer(object):
                 new_state_dict[name] = v
             # load params
             self.model.load_state_dict(new_state_dict)
-            # self.model.load_state_dict(state_dict)
-            # self.model.load_state_dict(convert_state_dict(state_dict))
         self.model = torch.nn.DataParallel(self.model, device_ids=[self.args.gpu])
         self.model.cuda(self.args.gpu)
-        # model_pth = "/media/work/3D/SimGNN/kx/SimGNN/debug/0.pth"
-        # self.model.load_state_dict(torch.load(model_pth))
 
     def initial_label_enumeration(self):
         """
@@ -225,9 +194,6 @@ class SGTrainer(object):
             train_sequences = ["00","01","02","03","04","05","06","07","08","09","10"] #1-fold
             eval_seq = self.args.fold
             print("evaling fold: ", eval_seq)
-            # train_dir = "/media/work/data/kitti/odometry/semantic-kitti/DGCNN_graph_pairs_3_20_closure/"
-            # train_dir_drop30 = "/media/work/data/kitti/odometry/semantic-kitti/DGCNN_graph_pairs_3_20_drop30_closure/"
-            # train_dir_drop90 = "/media/datasets/yxm/DGCNN_graph_pairs_3_20_drop90_closure/"
             graph_pairs_dir = self.args.graph_pairs_dir
             train_graphs = []
             for sq in train_sequences:
@@ -235,21 +201,9 @@ class SGTrainer(object):
                     listDir(os.path.join(graph_pairs_dir, sq), train_graphs)
                     self.training_graphs.extend(train_graphs)
                     train_graphs = []
-                    # listDir(train_dir_drop30 + sq, train_graphs)
-                    # self.training_graphs.extend(train_graphs)
-                    # train_graphs = []
-                    # listDir(train_dir_drop90 + sq, train_graphs)
-                    # self.training_graphs.extend(train_graphs)
-                    # train_graphs = []
                 else:
                     listDir(os.path.join(graph_pairs_dir, sq), self.evaling_graphs)
-            # listDir(self.args.training_graphs, self.training_graphs)
-            # listDir(self.args.testing_graphs, self.testing_graphs)
-            # listDir(self.args.evaling_graphs, self.evaling_graphs)
             self.testing_graphs = self.evaling_graphs
-            # # todo debug
-            # self.training_graphs = self.training_graphs[:1000]
-            # self.evaling_graphs = self.evaling_graphs[:1000]
             assert len(self.evaling_graphs) != 0
             assert len(self.training_graphs) != 0
 
@@ -305,27 +259,27 @@ class SGTrainer(object):
 
         node_num_1 = len(data["nodes_1"])
         node_num_2 = len(data["nodes_2"])
-        if node_num_1 > NODE_NUM:
-            sampled_index_1 = np.random.choice(node_num_1, NODE_NUM, replace=False)
+        if node_num_1 > self.args.node_num:
+            sampled_index_1 = np.random.choice(node_num_1, self.args.node_num, replace=False)
             sampled_index_1.sort()
             data["nodes_1"] = np.array(data["nodes_1"])[sampled_index_1].tolist()
             data["centers_1"] = np.array(data["centers_1"])[sampled_index_1]
 
-        elif node_num_1 < NODE_NUM:
+        elif node_num_1 < self.args.node_num:
             data["nodes_1"] = np.concatenate(
-                (np.array(data["nodes_1"]), -np.ones(NODE_NUM - node_num_1))).tolist()  # padding 0
+                (np.array(data["nodes_1"]), -np.ones(self.args.node_num - node_num_1))).tolist()  # padding 0
             data["centers_1"] = np.concatenate(
-                (np.array(data["centers_1"]), np.zeros((NODE_NUM - node_num_1,3))))  # padding 0
+                (np.array(data["centers_1"]), np.zeros((self.args.node_num - node_num_1,3))))  # padding 0
 
-        if node_num_2 > NODE_NUM:
-            sampled_index_2 = np.random.choice(node_num_2, NODE_NUM, replace=False)
+        if node_num_2 > self.args.node_num:
+            sampled_index_2 = np.random.choice(node_num_2, self.args.node_num, replace=False)
             sampled_index_2.sort()
             data["nodes_2"] = np.array(data["nodes_2"])[sampled_index_2].tolist()
             data["centers_2"] = np.array(data["centers_2"])[sampled_index_2]  # node_num x 3
-        elif node_num_2 < NODE_NUM:
-            data["nodes_2"] = np.concatenate((np.array(data["nodes_2"]), -np.ones(NODE_NUM - node_num_2))).tolist()
+        elif node_num_2 < self.args.node_num:
+            data["nodes_2"] = np.concatenate((np.array(data["nodes_2"]), -np.ones(self.args.node_num - node_num_2))).tolist()
             data["centers_2"] = np.concatenate(
-                (np.array(data["centers_2"]), np.zeros((NODE_NUM - node_num_2, 3))))  # padding 0
+                (np.array(data["centers_2"]), np.zeros((self.args.node_num - node_num_2, 3))))  # padding 0
 
         new_data = dict()
         features_1 = np.expand_dims(np.array(
@@ -341,10 +295,6 @@ class SGTrainer(object):
         # 1xnode_numx3
         batch_xyz_1 = np.expand_dims(data["centers_1"], axis=0)
         batch_xyz_2 = np.expand_dims(data["centers_2"], axis=0)
-        # # visu data
-        # print("original xyz1: ")
-        # print(batch_xyz_1)
-        # vis_point_cloud(batch_xyz_1)
         if training:
             # random flip data
             if random.random() > 0.5:
@@ -352,12 +302,6 @@ class SGTrainer(object):
                 batch_xyz_2[:, :, 0] = -batch_xyz_2[:, :, 0]
             batch_xyz_1 = self.augment_data(batch_xyz_1)
             batch_xyz_2 = self.augment_data(batch_xyz_2)
-        # todo rotate
-        # batch_xyz_1 = rotate_point_cloud(batch_xyz_1)
-        # batch_xyz_1 = rotate_point_cloud(batch_xyz_1)
-            # print("augment xyz1: ")
-            # print(batch_xyz_1)
-            # vis_point_cloud(batch_xyz_1)
         #  Bxnum_nodex(3+num_label) -> Bx(3+num_label)xnum_node
         xyz_feature_1 = np.concatenate((batch_xyz_1, features_1), axis=2).transpose(0,2,1)
         xyz_feature_2 = np.concatenate((batch_xyz_2, features_2), axis=2).transpose(0,2,1)
@@ -366,13 +310,10 @@ class SGTrainer(object):
 
 
         if data["distance"] <= self.args.p_thresh:  # TODO
-            # new_data["target"] = torch.tensor(1.0).reshape(1)
             new_data["target"] = 1.0
         elif data["distance"] >= 20:
-            # new_data["target"] = torch.tensor(0.0).reshape(1)
             new_data["target"] = 0.0
         else:
-            # new_data["target"] = torch.tensor(-100.0).reshape(1)
             new_data["target"] = -100.0
             print("distance error: ", data["distance"])
             exit(-1)
@@ -390,7 +331,6 @@ class SGTrainer(object):
         batch_feature_1 = []
         batch_feature_2 = []
         for graph_pair in batch:
-            # print("graph_pair: ", graph_pair)
             data = process_pair(graph_pair)
             data = self.transfer_to_torch(data, training)
             batch_feature_1.append(data["features_1"])
@@ -404,9 +344,7 @@ class SGTrainer(object):
         data["features_1"] = torch.FloatTensor(np.array(batch_feature_1))
         data["features_2"] = torch.FloatTensor(np.array(batch_feature_2))
         data["target"] = torch.FloatTensor(np.array(batch_target))
-        # forward_t = time.time()
         prediction, _,_ = self.model(data)
-        # print("forward time: ", time.time()-forward_t)
         losses = torch.mean(torch.nn.functional.binary_cross_entropy(prediction, data["target"].cuda(self.args.gpu)))
         if training:
             losses.backward(retain_graph=True)
@@ -423,26 +361,17 @@ class SGTrainer(object):
         print("\nModel training.\n")
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.args.learning_rate,
                                           weight_decay=self.args.weight_decay)
-        # self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.args.learning_rate/10,
-        #                                   weight_decay=self.args.weight_decay)
-
-        # scheduler_cosine = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, self.args.epochs)  #max_epoch
-        # scheduler_warmup = GradualWarmupScheduler(self.optimizer, multiplier=10, total_epoch=10,
-        #                                           after_scheduler=scheduler_cosine)
         f1_max_his = 0
         self.model.train()
         epochs = trange(self.args.epochs, leave=True, desc="Epoch")
         for epoch in epochs:
-            # scheduler_warmup.step()
             batches = self.create_batches()
-            self.model.train()  #TODO: why deleted?
+            self.model.train()  
             self.loss_sum = 0
             main_index = 0
             for index, batch in tqdm(enumerate(batches), total=len(batches), desc="Batches"):
                 a = time.time()
                 loss_score,_,_ = self.process_batch(batch)
-                # print("time process batch: ", a-time.time())
-                # print(len(batch))
                 main_index = main_index + len(batch)
                 self.loss_sum = self.loss_sum + loss_score * len(batch)
                 loss = self.loss_sum / main_index
@@ -450,12 +379,11 @@ class SGTrainer(object):
                 self.writer.add_scalar('Train_sum', loss, int(epoch)*len(batches)*int(self.args.batch_size) + main_index)
                 self.writer.add_scalar('Train loss', loss_score, int(epoch) * len(batches)*int(self.args.batch_size) + main_index)
 
-            if epoch % 2 == 0: # TODO
+            if epoch % 2 == 0:
                 print("\nModel saving.\n")
                 loss, f1_max = self.score("eval")
                 self.writer.add_scalar("eval_loss", loss, int(epoch)*len(batches)*int(self.args.batch_size))
                 self.writer.add_scalar("f1_max_score", f1_max, int(epoch) * len(batches) * int(self.args.batch_size))
-                # self.writer.add_scalar("eval_error", error, int(epoch) * len(batches)*int(self.args.batch_size))
                 dict_name = self.args.logdir + "/" + str(epoch)+'.pth'
                 torch.save(self.model.state_dict(), dict_name)
                 if f1_max_his <= f1_max:
@@ -497,10 +425,8 @@ class SGTrainer(object):
         # calc F1-score
         F1_score = 2 * precision * recall / (precision + recall)
         F1_score = np.nan_to_num(F1_score)
-        # print(F1_score)
         F1_max_score = np.max(F1_score)
         print("\nModel " + split + " F1_max_score: " + str(F1_max_score) + ".")
-        # print('F1_max_score:', F1_max_score)
         model_loss = losses / len(batches)
         print("\nModel " + split + " loss: " + str(model_loss) + ".")
         return model_loss, F1_max_score
@@ -515,7 +441,6 @@ class SGTrainer(object):
         print("\nBaseline error: " + str(round(base_error, 5)) + ".")
         print("\nModel test error: " + str(round(model_error, 5)) + ".")
 
-# # modification！
     def eval_pair(self, pair_file):
         data =   (pair_file)
         data = self.transfer_to_torch(data, False)
@@ -543,13 +468,10 @@ class SGTrainer(object):
 
     def eval_batch_pair(self, batch):
         self.model.eval()
-        # self.optimizer.zero_grad()
-
         batch_target = []
         batch_feature_1 = []
         batch_feature_2 = []
         for graph_pair in batch:
-            # print("graph_pair: ", graph_pair)
             data = process_pair(graph_pair)
             data = self.transfer_to_torch(data, False)
             batch_feature_1.append(data["features_1"])
@@ -560,23 +482,18 @@ class SGTrainer(object):
         data["features_1"] = torch.FloatTensor(np.array(batch_feature_1))
         data["features_2"] = torch.FloatTensor(np.array(batch_feature_2))
         data["target"] = torch.FloatTensor(np.array(batch_target))
-        # forward_t = time.time()
         prediction, _, _ = self.model(data)
-        # print("forward time: ", time.time()-forward_t)
         prediction = prediction.cpu().detach().numpy().reshape(-1)
         gt = np.array(batch_target).reshape(-1)
         return prediction, gt
 
     def eval_batch_pair_data(self, batch):
         self.model.eval()
-        # self.optimizer.zero_grad()
 
         batch_target = []
         batch_feature_1 = []
         batch_feature_2 = []
         for graph_pair in batch:
-            # print("graph_pair: ", graph_pair)
-            # data = process_pair(graph_pair)
             data = self.transfer_to_torch(graph_pair, False)
             batch_feature_1.append(data["features_1"])
             batch_feature_2.append(data["features_2"])
@@ -595,13 +512,11 @@ class SGTrainer(object):
 
     def eval_batch_pair(self, batch):
         self.model.eval()
-        # self.optimizer.zero_grad()
 
         batch_target = []
         batch_feature_1 = []
         batch_feature_2 = []
         for graph_pair in batch:
-            # print("graph_pair: ", graph_pair)
             data = process_pair(graph_pair)
             data = self.transfer_to_torch(data, False)
             batch_feature_1.append(data["features_1"])

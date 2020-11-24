@@ -33,10 +33,8 @@ class AttentionModule(torch.nn.Module):
         """
         batch_size = embedding.shape[0]
         global_context = torch.mean(torch.matmul(embedding, self.weight_matrix), dim=1) # 0 # nxf -> f  bxnxf->bxf
-        # print("global_context: ", global_context.shape) #([128, 32])
         transformed_global = torch.tanh(global_context) # f  bxf
         sigmoid_scores = torch.sigmoid(torch.matmul(embedding,transformed_global.view(batch_size,-1, 1)))   #weights      nxf fx1  bxnxf bxfx1 bxnx1
-        # print("sigmoid_scores: ", sigmoid_scores.shape) # torch.Size([128, 30, 1])
         representation = torch.matmul(embedding.permute(0,2,1),sigmoid_scores)    # bxnxf bxfxn bxnx1 bxfx1
         return representation, sigmoid_scores
 
