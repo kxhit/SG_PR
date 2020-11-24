@@ -1,0 +1,21 @@
+arch:
+  keep_node: 1
+  filters_1: 64
+  filters_2: 64
+  filters_3: 32
+  tensor_neurons: 16
+  bottle_neck_neurons: 16
+train:
+  graph_pairs_dir: /home/l/sg_pr_test_data
+  p_thresh: 3
+  batch_size: 128
+  epochs: 500
+  fold: "00"
+  dropout: 0
+  learning_rate: 0.001
+  weight_decay: 0.0005
+  gpu: 0
+  logdir: "./logs"
+evo:
+  model: ""
+  
