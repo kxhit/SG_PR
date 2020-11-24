@@ -58,3 +58,6 @@ Todo
 1. Generate feature database by 'evaluate_Ford.m'
 2. Compute distance and plot PR curve by 'eval_SC_list_Ford.py'
 -->
+
+##Acknowledgement
+Thanks to the source code of the great work [SIMGNN](https://github.com/kxhit/SimGNN).
