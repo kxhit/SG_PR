@@ -1,7 +1,7 @@
 common:
   model: "./model/model.pth"
-  batch_size: 128
-  p_thresh: 3
+  batch_size: 16
+  p_thresh: 10
   graph_pairs_dir: ""
 arch:
   keep_node: 1
@@ -20,8 +20,8 @@ train:
   logdir: "./logs"
   node_num: 100
 eva_batch:
-  sequences: ["05"]
+  sequences: ["00","05"]
   output_path: "./eva"
+  show: True
 eva_pair:
-  pair_file: "./data/test2.json"
-  
+  pair_file: ["./data/0.json","./data/250.json"]

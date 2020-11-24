@@ -1,12 +1,10 @@
 import numpy as np
 import json
 import math
-import networkx as nx
 from texttable import Texttable
 import os
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-import open3d as o3d
 import random
 
 def tab_printer(args):
@@ -26,7 +24,17 @@ def process_pair(path):
     :param path: Path to a JSON file.
     :return data: Dictionary with data.
     """
-    data = json.load(open(path))
+    data1 = json.load(open(path[0]))
+    data2 = json.load(open(path[1]))
+    data={}
+    data["centers_1"]=data1["centers_1"]
+    data["nodes_1"]=data1["nodes_1"]
+    data["centers_2"]=data2["centers_1"]
+    data["nodes_2"]=data2["nodes_1"]
+    pose1=data1["pose"]
+    pose2=data2["pose"]
+    dis=math.sqrt((pose1[3]-pose2[3])**2+(pose1[7]-pose2[7])**2+(pose1[11]-pose2[11])**2)
+    data["distance"]=dis
     return data
 
 def calculate_loss(prediction, target):
@@ -49,6 +57,18 @@ def calculate_normalized_ged(data):
     """
     norm_ged = data["ged"]/(0.5*(len(data["labels_1"])+len(data["labels_2"])))
     return norm_ged
+
+def load_paires(file,graph_pairs_dir):
+  paires=[]
+  with open(file) as f:
+    while True:
+      line=f.readline()
+      if not line:
+        break
+      line=line.strip().split(" ")
+      paires.append([os.path.join(graph_pairs_dir,line[0]),os.path.join(graph_pairs_dir,line[1])])
+  return paires
+
 
 def listDir(path, list_name):
     """

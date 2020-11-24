@@ -1,14 +1,6 @@
 from utils import tab_printer
 from sg_net import SGTrainer
 from parser_sg import sgpr_args
-import numpy as np
-from tqdm import tqdm
-import os
-import json
-from matplotlib import pyplot as plt
-from sklearn import metrics
-import torch
-import time
 
 
 def main():

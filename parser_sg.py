@@ -26,6 +26,7 @@ class sgpr_args():
         #eva_batch
         self.sequences=[]
         self.output_path="./eva"
+        self.show=False
         #eva_pair
         self.pair_file=""
 
@@ -55,5 +56,6 @@ class sgpr_args():
         #eva_batch
         self.sequences=config_args['eva_batch']['sequences']
         self.output_path=config_args['eva_batch']['output_path']
+        self.show=config_args['eva_batch']['show']
         #eva_pair
         self.pair_file=config_args['eva_pair']['pair_file']

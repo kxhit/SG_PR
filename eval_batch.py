@@ -4,16 +4,19 @@ from parser_sg import sgpr_args
 import numpy as np
 from tqdm import tqdm
 import os
-import json
+import sys
 from matplotlib import pyplot as plt
 from sklearn import metrics
-import torch
-import time
+from utils import *
 
 
 def main():
     args = sgpr_args()
-    args.load('./config/config.yml')
+    if len(sys.argv)>1:
+        args.load(sys.argv[1])
+    else:
+        args.load('./config/config.yml')
+    args.load(os.path.abspath('./config/config.yml'))
     tab_printer(args)
     trainer = SGTrainer(args, args.model)
     trainer.model.eval()
@@ -21,14 +24,9 @@ def main():
             os.makedirs(args.output_path)
     for sequence in tqdm(args.sequences):
         print("sequence: ", sequence)
-        pairs_files = os.listdir(os.path.join(args.graph_pairs_dir, sequence))
         gt_db = []
         pred_db = []
-
-        graph_pairs = []
-        for pair_file in tqdm(pairs_files):
-            graph_pairs.append(os.path.join(args.graph_pairs_dir, sequence, pair_file))
-
+        graph_pairs=load_paires(os.path.join(args.graph_pairs_dir, sequence+".txt"),args.graph_pairs_dir)
         batches = [graph_pairs[graph:graph + args.batch_size] for graph in
                    range(0, len(graph_pairs), args.batch_size)]
         for batch in tqdm(batches):
@@ -80,7 +78,8 @@ def main():
         plt.legend(loc="lower right")
         pr_out = os.path.join(args.output_path, sequence + "_DL_pr_curve.png")
         plt.savefig(pr_out)
-        plt.show()
+        if args.show:
+            plt.show()
         # calc F1-score
         F1_score = 2 * precision * recall / (precision + recall)
         F1_score = np.nan_to_num(F1_score)

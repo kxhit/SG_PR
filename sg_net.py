@@ -1,6 +1,4 @@
-import glob
 import time
-import math
 import torch
 import random
 import numpy as np
@@ -11,7 +9,6 @@ from utils import *
 from tensorboardX import SummaryWriter
 # from warmup_scheduler import GradualWarmupScheduler
 import os
-import sys
 import dgcnn as dgcnn
 import torch.nn as nn
 from collections import OrderedDict
@@ -190,23 +187,19 @@ class SGTrainer(object):
         self.training_graphs = []
         self.testing_graphs = []
         self.evaling_graphs = []
-        if self.model_pth == "":
-            train_sequences = ["00","01","02","03","04","05","06","07","08","09","10"] #1-fold
-            eval_seq = self.args.fold
-            print("evaling fold: ", eval_seq)
-            graph_pairs_dir = self.args.graph_pairs_dir
-            train_graphs = []
-            for sq in train_sequences:
-                if sq != eval_seq:
-                    listDir(os.path.join(graph_pairs_dir, sq), train_graphs)
-                    self.training_graphs.extend(train_graphs)
-                    train_graphs = []
-                else:
-                    listDir(os.path.join(graph_pairs_dir, sq), self.evaling_graphs)
-            self.testing_graphs = self.evaling_graphs
-            assert len(self.evaling_graphs) != 0
-            assert len(self.training_graphs) != 0
-
+        train_sequences = ["00","01","02","03","04","05","06","07","08","09","10"] #1-fold
+        eval_seq = self.args.fold
+        print("evaling fold: ", eval_seq)
+        graph_pairs_dir = self.args.graph_pairs_dir
+        for sq in train_sequences:
+            if sq != eval_seq:
+                train_graphs=load_paires(os.path.join(graph_pairs_dir, sq+".txt"),graph_pairs_dir)
+                self.training_graphs.extend(train_graphs)
+            else:
+                self.evaling_graphs=load_paires(os.path.join(graph_pairs_dir, sq+".txt"),graph_pairs_dir)
+        self.testing_graphs = self.evaling_graphs
+        assert len(self.evaling_graphs) != 0
+        assert len(self.training_graphs) != 0
         self.global_labels = [i for i in range(12)] # 20
         self.global_labels = {val: index for index, val in enumerate(self.global_labels)}
         self.number_of_labels = len(self.global_labels)
@@ -527,9 +520,9 @@ class SGTrainer(object):
         data["features_1"] = torch.FloatTensor(np.array(batch_feature_1))
         data["features_2"] = torch.FloatTensor(np.array(batch_feature_2))
         data["target"] = torch.FloatTensor(np.array(batch_target))
-        forward_t = time.time()
+        # forward_t = time.time()
         prediction, _, _ = self.model(data)
-        print("forward time: ", time.time() - forward_t)
+        # print("forward time: ", time.time() - forward_t)
         prediction = prediction.cpu().detach().numpy().reshape(-1)
         gt = np.array(batch_target).reshape(-1)
         return prediction, gt

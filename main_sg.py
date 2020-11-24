@@ -2,7 +2,6 @@ from utils import tab_printer
 from sg_net import SGTrainer
 from parser_sg import sgpr_args
 import sys
-import os
 
 def main():
     """
