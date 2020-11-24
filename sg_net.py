@@ -395,7 +395,10 @@ class SGTrainer(object):
             data = self.transfer_to_torch(data, training)
             batch_feature_1.append(data["features_1"])
             batch_feature_2.append(data["features_2"])
+            batch_feature_1.append(data["features_2"])
+            batch_feature_2.append(data["features_1"])
             target = data["target"]
+            batch_target.append(target)
             batch_target.append(target)
         data = dict()
         data["features_1"] = torch.FloatTensor(np.array(batch_feature_1))
