@@ -1,4 +1,4 @@
-# SG_LC
+# SG_PR
 Code for IROS2020 paper [Semantic Graph Based Place Recognition for 3D Point Clouds](https://ras.papercept.net/proceedings/IROS20/0170.pdf)
 
 ![](./doc/pipeline.png)
