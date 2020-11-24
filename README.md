@@ -60,4 +60,4 @@ Todo
 -->
 
 ##Acknowledgement
-Thanks to the source code of the great work [SIMGNN](https://github.com/benedekrozemberczki/SimGNN).
+Thanks to the source code of some great works such as [SIMGNN](https://github.com/benedekrozemberczki/SimGNN), [DGCNN](https://github.com/WangYueFt/dgcnn).
