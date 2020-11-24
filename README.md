@@ -1,4 +1,5 @@
 # SG_PR
+
 Code for IROS2020 paper [Semantic Graph Based Place Recognition for 3D Point Clouds](https://ras.papercept.net/proceedings/IROS20/0170.pdf)
 
 ![](./doc/pipeline.png)
@@ -6,7 +7,9 @@ Code for IROS2020 paper [Semantic Graph Based Place Recognition for 3D Point Clo
 Pipeline overview.
 
 ## Citation
+
 If you think this work is useful for your research, please consider citing:
+
 ```
 @inproceedings{kong2020semantic,
   title={Semantic Graph based Place Recognition for Point Clouds},
@@ -19,7 +22,9 @@ If you think this work is useful for your research, please consider citing:
 ```
 
 ## Dataset
+
 Preprocess raw point clouds and generate semantic graph pairs.
+
 #### KITTI
 
 <!--
@@ -31,14 +36,17 @@ Todo
 -->
 
 ### Prepare
+
 1. Generate graphs from semantic point clouds 'yxm'
 2. Generate positive and negative graph pairs defined by positive distance threshold. Downsampling negative samples for balance.
 'get_pair_list'
 
 ### Training
-3. 
+
+
 
 ### Testing
+
 3. Generate graph pairs LIST defined by positive distance threshold and time threshold (filter out easy positive pairs). 'prepare/gen_sem_ford_graph_paris.py'
 4. Plot the results for comparision
 
@@ -60,4 +68,5 @@ Todo
 -->
 
 ##Acknowledgement
+
 Thanks to the source code of some great works such as [SIMGNN](https://github.com/benedekrozemberczki/SimGNN), [DGCNN](https://github.com/WangYueFt/dgcnn).
