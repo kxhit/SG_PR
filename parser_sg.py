@@ -25,7 +25,6 @@ class sgpr_args():
 
     def load(self,config_file):
         config_args=yaml.load(open(os.path.abspath(config_file)))
-        print(config_args)
         #arch
         self.keep_node=config_args['arch']['keep_node']
         self.filters_1=config_args['arch']['filters_1']
