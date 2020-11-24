@@ -23,9 +23,11 @@ class sgpr_args():
         self.gpu=0
         self.logdir="./logs"
         self.node_num=100
-        #eva
+        #eva_batch
         self.sequences=[]
         self.output_path="./eva"
+        #eva_pair
+        self.pair_file=""
 
     def load(self,config_file):
         config_args=yaml.load(open(os.path.abspath(config_file)))
@@ -50,6 +52,8 @@ class sgpr_args():
         self.batch_size=config_args['common']['batch_size']
         self.p_thresh=config_args['common']['p_thresh']
         self.graph_pairs_dir=config_args['common']['graph_pairs_dir']
-        #eva
-        self.sequences=config_args['eva']['sequences']
-        self.output_path=config_args['eva']['output_path']
+        #eva_batch
+        self.sequences=config_args['eva_batch']['sequences']
+        self.output_path=config_args['eva_batch']['output_path']
+        #eva_pair
+        self.pair_file=config_args['eva_pair']['pair_file']
