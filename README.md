@@ -69,7 +69,7 @@ Todo
 
 ## TODO
 - [ ] Support Ford Campus Dataset
-- [ ] Release compared methods e.g., PointNetVLAD trained on KITTI (PV-KITTI)
+- [ ] Release compared methods e.g., [PointNetVLAD](https://github.com/mikacuy/pointnetvlad) trained on KITTI (PV-KITTI)
 - [ ] Release preprocessing code
 
 
