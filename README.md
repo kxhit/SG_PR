@@ -67,12 +67,12 @@ Todo
 2. Compute distance and plot PR curve by 'eval_SC_list_Ford.py'
 -->
 
-##TODO
+## TODO
 - [ ] Support Ford Campus Dataset
 - [ ] Release compared methods e.g., PointNetVLAD trained on KITTI (PV-KITTI)
 - [ ] Release preprocessing code
 
 
-##Acknowledgement
+## Acknowledgement
 
 Thanks to the source code of some great works such as [SIMGNN](https://github.com/benedekrozemberczki/SimGNN), [DGCNN](https://github.com/WangYueFt/dgcnn).
