@@ -77,7 +77,7 @@ class SG(torch.nn.Module):
 
 
     def dgcnn_conv_pass(self, x):
-        self.k = 10 # TODO
+        self.k = self.args.K
         xyz = x[:,:3,:] # Bx3xN
         sem = x[:,3:,:]   # BxfxN
 

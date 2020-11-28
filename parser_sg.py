@@ -14,6 +14,7 @@ class sgpr_args():
         self.filters_3=32
         self.tensor_neurons=16
         self.bottle_neck_neurons=16
+        self.K=10
         #train
         self.epochs=500
         self.train_sequences=[]
@@ -40,6 +41,7 @@ class sgpr_args():
         self.filters_3=config_args['arch']['filters_3']
         self.tensor_neurons=config_args['arch']['tensor_neurons']
         self.bottle_neck_neurons=config_args['arch']['bottle_neck_neurons']
+        self.K=config_args['arch']['K']
         #train
         self.epochs=config_args['train']['epochs']
         self.train_sequences=config_args['train']['train_sequences']

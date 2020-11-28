@@ -2,7 +2,7 @@ common:
   model: ""
   batch_size: 16
   p_thresh: 3
-  graph_pairs_dir: "/home/l/桌面/conv_graph/graphs_rn"
+  graph_pairs_dir: ""
 arch:
   keep_node: 1
   filters_1: 64
