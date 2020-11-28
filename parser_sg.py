@@ -16,7 +16,8 @@ class sgpr_args():
         self.bottle_neck_neurons=16
         #train
         self.epochs=500
-        self.fold="00"
+        self.train_sequences=[]
+        self.eval_sequences=[]
         self.dropout=0
         self.learning_rate=1e-3
         self.weight_decay=5e-4
@@ -41,7 +42,8 @@ class sgpr_args():
         self.bottle_neck_neurons=config_args['arch']['bottle_neck_neurons']
         #train
         self.epochs=config_args['train']['epochs']
-        self.fold=config_args['train']['fold']
+        self.train_sequences=config_args['train']['train_sequences']
+        self.eval_sequences=config_args['train']['eval_sequences']
         self.dropout=config_args['train']['dropout']
         self.learning_rate=config_args['train']['learning_rate']
         self.weight_decay=config_args['train']['weight_decay']

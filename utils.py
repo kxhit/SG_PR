@@ -27,13 +27,13 @@ def process_pair(path):
     data1 = json.load(open(path[0]))
     data2 = json.load(open(path[1]))
     data={}
-    data["centers_1"]=data1["centers_1"]
-    data["nodes_1"]=data1["nodes_1"]
-    data["centers_2"]=data2["centers_1"]
-    data["nodes_2"]=data2["nodes_1"]
+    data["centers_1"]=data1["centers"]
+    data["nodes_1"]=data1["nodes"]
+    data["centers_2"]=data2["centers"]
+    data["nodes_2"]=data2["nodes"]
     pose1=data1["pose"]
     pose2=data2["pose"]
-    dis=math.sqrt((pose1[3]-pose2[3])**2+(pose1[7]-pose2[7])**2+(pose1[11]-pose2[11])**2)
+    dis=math.sqrt((pose1[3]-pose2[3])**2+(pose1[11]-pose2[11])**2)
     data["distance"]=dis
     return data
 

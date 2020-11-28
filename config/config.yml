@@ -1,8 +1,8 @@
 common:
-  model: "./model/model.pth"
+  model: ""
   batch_size: 16
-  p_thresh: 10
-  graph_pairs_dir: ""
+  p_thresh: 3
+  graph_pairs_dir: "/home/l/桌面/conv_graph/graphs_rn"
 arch:
   keep_node: 1
   filters_1: 64
@@ -10,9 +10,11 @@ arch:
   filters_3: 32
   tensor_neurons: 16
   bottle_neck_neurons: 16
+  K: 10
 train:
   epochs: 500
-  fold: "00"
+  train_sequences: ['00','01','02','03','04','05','06','07','09','10']
+  eval_sequences: ["08",]
   dropout: 0
   learning_rate: 0.001
   weight_decay: 0.0005
