@@ -21,31 +21,17 @@ If you think this work is useful for your research, please consider citing:
 }
 ```
 
-<!-- ## Dataset
-
-Preprocess raw point clouds and generate semantic graph pairs.
-
-#### KITTI -->
-
-<!--
-Todo
-#### Ford
-1. create SCANS with intensity .mat files by 'create_ijrr_dataset.m'
-2. create .bin files with normalized intensity SCANS by 'create_bin_data.m'
-3. create test_list, poses and timestamp files by 'gen_sem_ford_graph_pairs' 
--->
-
-<!-- ### Prepare
-
-1. Generate graphs from semantic point clouds 'yxm'. 
-2. Generate positive and negative graph pairs defined by positive distance threshold. Downsampling negative samples for balance.
-'get_pair_list'. -->
+## Requirements
+We recommend python3.6. You can install required dependencies by:
+```bash
+pip install -r requirements.txt
+```
 
 ## Training
 
 ### Data structure
 
-The recommended data structure is:
+The data structure is:
 
 ```bash
 data
@@ -65,11 +51,11 @@ data
     |---01.txt
     |---...
 ```
-You can download the [preprocessed data](https://drive.google.com/file/d/1eu4G008gvAJGjU-M8qBvTN0JLHG2B-OB/view?usp=sharing) we provide.
+You can download the provided [preprocessed data](https://drive.google.com/file/d/1eu4G008gvAJGjU-M8qBvTN0JLHG2B-OB/view?usp=sharing).
 
 ### Configuration file
 
-Before training the model, you need to modify the configuration file according to your needs. The main parameters are as follows:
+Before training the model, you need to modify the configuration file in ./config according to your needs. The main parameters are as follows:
 - graph_pairs_dir: the root dir of your dataset.
 - batch_size: batch size.
 - <span id="p_thresh">p_thresh</span>: distance threshold for positive samples. If the distance between two samples is less than p_thresh meters, they will be treated as positive samples. The distance threshold for negative samples is set to 20 meters by default. Note that your training sample pairs should not contain samples with a distance greater than p_thresh meters and less than 20 meters.
@@ -90,7 +76,7 @@ python main_sg.py
 
 ### eval_pair
 
-This example takes a pair of graph as input and out put their similarity score. To run this example You need to set the following parameters:
+This example takes a pair of graphs as input and output their similarity score. To run this example, you need to set the following parameters:
 - model: the model file.
 - pair_file: a pair of graph.
 
@@ -101,10 +87,10 @@ python eval_pair.py
 
 ### eval_batch
 
-This example tests a sequence, the results are it's PR curve and F1 max score. To run this example You need to set the following parameters:
+This example tests a sequence, the results are it's PR curve and F1 max score. To run this example, you need to set the following parameters:
 - model: the model file.
 - batch_size: batch size.
-- [p_thresh](#p_thresh)
+- p_thresh: e.g., 3m, 5m, 10m.
 - graph_pairs_dir: the path which contains test sequences.
 - sequences: list of test sequences.
 - output_path: Path to save test results.
