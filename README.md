@@ -21,11 +21,11 @@ If you think this work is useful for your research, please consider citing:
 }
 ```
 
-## Dataset
+<!-- ## Dataset
 
 Preprocess raw point clouds and generate semantic graph pairs.
 
-#### KITTI
+#### KITTI -->
 
 <!--
 Todo
@@ -35,15 +35,15 @@ Todo
 3. create test_list, poses and timestamp files by 'gen_sem_ford_graph_pairs' 
 -->
 
-### Prepare
+<!-- ### Prepare
 
 1. Generate graphs from semantic point clouds 'yxm'. 
 2. Generate positive and negative graph pairs defined by positive distance threshold. Downsampling negative samples for balance.
-'get_pair_list'.
+'get_pair_list'. -->
 
-### Training
+## Training
 
-#### Data structure
+### Data structure
 
 The recommended data structure is:
 
@@ -67,7 +67,7 @@ data
 ```
 You can also download the [preprocessed data](TODO) we provide.
 
-#### Configuration file
+### Configuration file
 
 Before training the model, you need to modify the configuration file according to your needs. The main parameters are as follows:
 - graph_pairs_dir: the root dir of your dataset.
@@ -78,7 +78,7 @@ Before training the model, you need to modify the configuration file according t
 - eval_sequences: list of validation data.
 - logdir: path to save training results.
 
-#### Training model
+### Training model
 
 After preparing the data and modifying the configuration file, you can start training. Just run:
 
@@ -86,9 +86,9 @@ After preparing the data and modifying the configuration file, you can start tra
 python main_sg.py
 ```
 
-### Testing
+## Testing
 
-#### eval_pair
+### eval_pair
 
 This example takes a pair of graph as input and out put their similarity score. To run this example You need to set the following parameters:
 - model: the model file.
@@ -99,7 +99,7 @@ Then just run:
 python eval_pair.py
 ```
 
-#### eval_batch
+### eval_batch
 
 This example tests a sequence, the results are it's PR curve and F1 max score. To run this example You need to set the following parameters:
 - model: the model file.
