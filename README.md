@@ -65,7 +65,7 @@ data
     |---01.txt
     |---...
 ```
-You can download the [preprocessed data](TODO) we provide.
+You can download the [preprocessed data](https://drive.google.com/file/d/1eu4G008gvAJGjU-M8qBvTN0JLHG2B-OB/view?usp=sharing) we provide.
 
 ### Configuration file
 
