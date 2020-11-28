@@ -1,29 +1,29 @@
 common:
-  model: ""
-  batch_size: 16
-  p_thresh: 3
-  graph_pairs_dir: ""
+  model: "" #pytorch model
+  batch_size: 16  #batch size 
+  p_thresh: 3 #distance threshold of positive sample
+  graph_pairs_dir: "" #dir contain training or testing data
 arch:
-  keep_node: 1
+  keep_node: 1 #for test
   filters_1: 64
   filters_2: 64
   filters_3: 32
   tensor_neurons: 16
   bottle_neck_neurons: 16
-  K: 10
+  K: 10 #KNN parameter
 train:
   epochs: 500
-  train_sequences: ['00','01','02','03','04','05','06','07','09','10']
-  eval_sequences: ["08",]
+  train_sequences: ['00','01','02','03','04','05','06','07','09','10']  #list of training sequences 
+  eval_sequences: ["08",] #list of Validation sequence
   dropout: 0
   learning_rate: 0.001
   weight_decay: 0.0005
-  gpu: 0
-  logdir: "./logs"
-  node_num: 100
+  gpu: 0 #gpu id
+  logdir: "./logs" #dir to save training results
+  node_num: 100 #if node num of a graph is less than node_num, we use zero node to pad it to node_num
 eva_batch:
-  sequences: ["00","05"]
-  output_path: "./eva"
-  show: True
+  sequences: ["00","05"]  #list of sequences to evaluation
+  output_path: "./eva"  #dir to save evaluation results
+  show: True  #Whether to display the image
 eva_pair:
   pair_file: ["./data/0.json","./data/250.json"]
