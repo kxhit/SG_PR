@@ -57,14 +57,18 @@ You can download the provided [preprocessed data](https://drive.google.com/file/
 
 Before training the model, you need to modify the configuration file in ./config according to your needs. The main parameters are as follows:
 - graph_pairs_dir: the root dir of your dataset.
-- batch_size: batch size.
-- <span id="p_thresh">p_thresh</span>: distance threshold for positive samples. If the distance between two samples is less than p_thresh meters, they will be treated as positive samples. The distance threshold for negative samples is set to 20 meters by default. Note that your training sample pairs should not contain samples with a distance greater than p_thresh meters and less than 20 meters.
+- batch_size: batch size, 128 in our paper.
+- p_thresh: distance threshold for positive samples, e.g., 3m 5m 10m. If the distance between two samples is less than p_thresh meters, they will be treated as positive samples. The distance threshold for negative samples is set to 20 meters by default. Note that your training sample pairs should not contain samples with a distance greater than p_thresh meters and less than 20 meters.
 - model: pre-trained model, if you want to train a completely new model from scratch, you should set it to empty.
+
+
+### Training model
+
 - train_sequences: list of training data.
 - eval_sequences: list of validation data.
 - logdir: path to save training results.
-
-### Training model
+- graph_pairs_dir: set to SK label dir, e.g., '../SG_PR_DATA/graphs_sk'
+- pair_list_dir: set to train dir, e.g., '../SG_PR_DATA/train/3_20', 3_20 refers to positive threshold 3m negative threshold 20m
 
 After preparing the data and modifying the configuration file, you can start training. Just run:
 
@@ -77,7 +81,7 @@ python main_sg.py
 ### eval_pair
 
 This example takes a pair of graphs as input and output their similarity score. To run this example, you need to set the following parameters:
-- model: the model file.
+- model: the eval model file.
 - pair_file: a pair of graph.
 
 Then just run:
@@ -88,13 +92,12 @@ python eval_pair.py
 ### eval_batch
 
 This example tests a sequence, the results are it's PR curve and F1 max score. To run this example, you need to set the following parameters:
-- model: the model file.
-- batch_size: batch size.
-- p_thresh: e.g., 3m, 5m, 10m.
-- graph_pairs_dir: the path which contains test sequences.
+- model: the eval model file.
+- graph_pairs_dir: set to SK label dir ('../SG_PR_DATA/graphs_sk') or RN prediction dir ('../SG_PR_DATA/graphs_rn') or other semantic prediction in the future.
+- pair_list_dir: set to eval dir which excludes easy positive pairs, e.g., '../SG_PR_DATA/eval/3_20' 
 - sequences: list of test sequences.
-- output_path: Path to save test results.
-- show: Whether to display the pr curve in real time.
+- output_path: path to save test results.
+- show: whether to display the pr curve in real time.
 
 Then just run:
 ```bash

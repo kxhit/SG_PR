@@ -1,9 +1,9 @@
 common:
   model: "./model/model.pth" #pytorch model
-  batch_size: 64  #batch size 
+  batch_size: 128  #batch size
   p_thresh: 3 #distance threshold of positive sample
   graph_pairs_dir: "../SG_PR_DATA/graphs_rn" #dir contain training or testing data
-  pair_list_dir: '../SG_PR_DATA/train/3_20' #pair list for traning or testing data
+  pair_list_dir: '../SG_PR_DATA/eval/3_20' #pair list for traning or testing data
 arch:
   keep_node: 1 #for test
   filters_1: 64
