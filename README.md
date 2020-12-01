@@ -59,11 +59,10 @@ Before training the model, you need to modify the configuration file in ./config
 - graph_pairs_dir: the root dir of your dataset.
 - batch_size: batch size, 128 in our paper.
 - p_thresh: distance threshold for positive samples, e.g., 3m 5m 10m. If the distance between two samples is less than p_thresh meters, they will be treated as positive samples. The distance threshold for negative samples is set to 20 meters by default. Note that your training sample pairs should not contain samples with a distance greater than p_thresh meters and less than 20 meters.
-- model: pre-trained model, if you want to train a completely new model from scratch, you should set it to empty.
-
 
 ### Training model
 
+- model: pre-trained model, if you want to train a completely new model from scratch, you should set it to empty.
 - train_sequences: list of training data.
 - eval_sequences: list of validation data.
 - logdir: path to save training results.
