@@ -1,8 +1,9 @@
 common:
-  model: "./model/model.pth" #pytorch model
-  batch_size: 16  #batch size 
+  model: "" #pytorch model
+  batch_size: 64  #batch size 
   p_thresh: 3 #distance threshold of positive sample
-  graph_pairs_dir: "../SG_PR_DATA/graphs_rn" #dir contain training or testing data
+  graph_pairs_dir: "" #dir contain training or testing data
+  pair_list_dir: '' #pair list for traning or testing data
 arch:
   keep_node: 1 #for test
   filters_1: 64
@@ -22,7 +23,7 @@ train:
   logdir: "./logs" #dir to save training results
   node_num: 100 #if node num of a graph is less than node_num, we use zero node to pad it to node_num
 eva_batch:
-  sequences: ["00","05"]  #list of sequences to evaluation
+  sequences: ["00",]  #list of sequences to evaluation
   output_path: "./eva"  #dir to save evaluation results
   show: True  #Whether to display the image
 eva_pair:

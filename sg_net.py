@@ -193,10 +193,10 @@ class SGTrainer(object):
         print("evaling sequences: ", eval_sequences)
         graph_pairs_dir = self.args.graph_pairs_dir
         for sq in train_sequences:
-            train_graphs=load_paires(os.path.join(graph_pairs_dir, sq+".txt"),graph_pairs_dir)
+            train_graphs=load_paires(os.path.join(self.args.pair_list_dir, sq+".txt"),graph_pairs_dir)
             self.training_graphs.extend(train_graphs)
         for sq in eval_sequences:
-            self.evaling_graphs=load_paires(os.path.join(graph_pairs_dir, sq+".txt"),graph_pairs_dir)
+            self.evaling_graphs=load_paires(os.path.join(self.args.pair_list_dir, sq+".txt"),graph_pairs_dir)
         self.testing_graphs = self.evaling_graphs
         assert len(self.evaling_graphs) != 0
         assert len(self.training_graphs) != 0

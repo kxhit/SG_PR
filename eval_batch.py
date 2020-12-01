@@ -1,3 +1,4 @@
+from numpy.core.arrayprint import printoptions
 from utils import tab_printer
 from sg_net import SGTrainer
 from parser_sg import sgpr_args
@@ -26,7 +27,7 @@ def main():
         print("sequence: ", sequence)
         gt_db = []
         pred_db = []
-        graph_pairs=load_paires(os.path.join(args.graph_pairs_dir, sequence+".txt"),args.graph_pairs_dir)
+        graph_pairs=load_paires(os.path.join(args.pair_list_dir, sequence+".txt"),args.graph_pairs_dir)
         batches = [graph_pairs[graph:graph + args.batch_size] for graph in
                    range(0, len(graph_pairs), args.batch_size)]
         for batch in tqdm(batches):
@@ -85,6 +86,7 @@ def main():
         F1_score = np.nan_to_num(F1_score)
         F1_max_score = np.max(F1_score)
         f1_out = os.path.join(args.output_path, sequence + "_DL_F1_max.txt")
+        print('F1 max score',F1_max_score)
         with open(f1_out, "w") as out:
             out.write(str(F1_max_score))
 

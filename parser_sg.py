@@ -7,6 +7,7 @@ class sgpr_args():
         self.graph_pairs_dir="/dir_of_graph_pairs"
         self.p_thresh=3
         self.batch_size=128
+        self.pair_list_dir=''
         #arch
         self.keep_node=1
         self.filters_1=64
@@ -57,6 +58,7 @@ class sgpr_args():
         self.batch_size=config_args['common']['batch_size']
         self.p_thresh=config_args['common']['p_thresh']
         self.graph_pairs_dir=config_args['common']['graph_pairs_dir']
+        self.pair_list_dir=config_args['common']['pair_list_dir']
         #eva_batch
         self.sequences=config_args['eva_batch']['sequences']
         self.output_path=config_args['eva_batch']['output_path']
