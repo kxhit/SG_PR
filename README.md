@@ -62,7 +62,7 @@ Before training the model, you need to modify the configuration file in ./config
 
 ### Training model
 
-- model: pre-trained model, if you want to train a completely new model from scratch, you should set it to empty.
+- model: pre-trained model.
 - train_sequences: list of training data.
 - eval_sequences: list of validation data.
 - logdir: path to save training results.

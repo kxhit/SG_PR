@@ -143,28 +143,25 @@ class SGTrainer(object):
     SG model trainer.
     """
 
-    def __init__(self, args, model_pth = ""):
+    def __init__(self, args, train=True):
         """
         :param args: Arguments object.
         """
         self.args = args
+        self.model_pth = self.args.model
 
-        self.model_pth = model_pth
-        if self.model_pth == "":
-            self.model_pth = self.args.model
-
-        self.initial_label_enumeration()
-        self.setup_model()
+        self.initial_label_enumeration(train)
+        self.setup_model(train)
         self.writer = SummaryWriter(logdir=self.args.logdir)
 
 
-    def setup_model(self):
+    def setup_model(self,train=True):
         """
         Creating a SG Net.
         """
         self.model = SG(self.args, self.number_of_labels)
 
-        if self.model_pth != "":
+        if (not train) and self.model_pth != "":
             print("loading model: ", self.model_pth)
             # original saved file with dataparallel
             state_dict = torch.load(self.model_pth, map_location='cuda:0') # todo
@@ -178,28 +175,28 @@ class SGTrainer(object):
         self.model = torch.nn.DataParallel(self.model, device_ids=[self.args.gpu])
         self.model.cuda(self.args.gpu)
 
-    def initial_label_enumeration(self):
+    def initial_label_enumeration(self,train=True):
         """
         Collecting the unique node idsentifiers.
         """
         print("\nEnumerating unique labels.\n")
-
-        self.training_graphs = []
-        self.testing_graphs = []
-        self.evaling_graphs = []
-        train_sequences = self.args.train_sequences
-        eval_sequences = self.args.eval_sequences
-        print("Train sequences: ", train_sequences)
-        print("evaling sequences: ", eval_sequences)
-        graph_pairs_dir = self.args.graph_pairs_dir
-        for sq in train_sequences:
-            train_graphs=load_paires(os.path.join(self.args.pair_list_dir, sq+".txt"),graph_pairs_dir)
-            self.training_graphs.extend(train_graphs)
-        for sq in eval_sequences:
-            self.evaling_graphs=load_paires(os.path.join(self.args.pair_list_dir, sq+".txt"),graph_pairs_dir)
-        self.testing_graphs = self.evaling_graphs
-        assert len(self.evaling_graphs) != 0
-        assert len(self.training_graphs) != 0
+        if train:
+            self.training_graphs = []
+            self.testing_graphs = []
+            self.evaling_graphs = []
+            train_sequences = self.args.train_sequences
+            eval_sequences = self.args.eval_sequences
+            print("Train sequences: ", train_sequences)
+            print("evaling sequences: ", eval_sequences)
+            graph_pairs_dir = self.args.graph_pairs_dir
+            for sq in train_sequences:
+                train_graphs=load_paires(os.path.join(self.args.pair_list_dir, sq+".txt"),graph_pairs_dir)
+                self.training_graphs.extend(train_graphs)
+            for sq in eval_sequences:
+                self.evaling_graphs=load_paires(os.path.join(self.args.pair_list_dir, sq+".txt"),graph_pairs_dir)
+            self.testing_graphs = self.evaling_graphs
+            assert len(self.evaling_graphs) != 0
+            assert len(self.training_graphs) != 0
         self.global_labels = [i for i in range(12)] # 20
         self.global_labels = {val: index for index, val in enumerate(self.global_labels)}
         self.number_of_labels = len(self.global_labels)

@@ -7,7 +7,7 @@ def main():
     args = sgpr_args()
     args.load('./config/config.yml')
     tab_printer(args)
-    trainer = SGTrainer(args, args.model)
+    trainer = SGTrainer(args, False)
     trainer.model.eval()
     pred, gt = trainer.eval_batch_pair([args.pair_file,])
     print("Score:",pred[0])

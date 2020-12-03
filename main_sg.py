@@ -13,7 +13,7 @@ def main():
     else:
         args.load('./config/config.yml')
     tab_printer(args)
-    trainer = SGTrainer(args)
+    trainer = SGTrainer(args,True)
     trainer.fit()
     trainer.score()
     

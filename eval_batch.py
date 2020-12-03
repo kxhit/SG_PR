@@ -19,7 +19,7 @@ def main():
         args.load('./config/config.yml')
     args.load(os.path.abspath('./config/config.yml'))
     tab_printer(args)
-    trainer = SGTrainer(args, args.model)
+    trainer = SGTrainer(args, False)
     trainer.model.eval()
     if not os.path.exists(args.output_path):
             os.makedirs(args.output_path)
