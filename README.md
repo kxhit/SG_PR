@@ -104,9 +104,14 @@ Then just run:
 python eval_batch.py
 ```
 
+
+## Other methods
+#### PointNetVLAD
+Please refer to our modified repo for training and testing PointNetVLAD on KITTI dataset, which is mentioned in our paper
+as [PV_KITTI](https://github.com/kxhit/pointnetvlad).
+
 <!--
 Todo
-## Other methods
 #### Scan Context
 ##### Ford
 1. Generate feature database by 'gen_SC_db_ford.py'
@@ -121,7 +126,7 @@ Todo
 
 ## TODO
 - [ ] Support Ford Campus Dataset
-- [ ] Release compared methods e.g., [PointNetVLAD](https://github.com/mikacuy/pointnetvlad) trained on KITTI (PV-KITTI)
+- [x] Release compared methods e.g., [PointNetVLAD](https://github.com/mikacuy/pointnetvlad) trained on KITTI (PV-KITTI)
 - [x] Release preprocessing code
 
 
