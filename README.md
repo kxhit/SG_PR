@@ -52,6 +52,7 @@ data
     |---...
 ```
 You can download the provided [preprocessed data](https://drive.google.com/file/d/1eu4G008gvAJGjU-M8qBvTN0JLHG2B-OB/view?usp=sharing).
+Or you can refer to the 'data_process' dir for details of generating graphs.
 
 ### Configuration file
 
@@ -121,7 +122,7 @@ Todo
 ## TODO
 - [ ] Support Ford Campus Dataset
 - [ ] Release compared methods e.g., [PointNetVLAD](https://github.com/mikacuy/pointnetvlad) trained on KITTI (PV-KITTI)
-- [ ] Release preprocessing code
+- [x] Release preprocessing code
 
 
 ## Acknowledgement
