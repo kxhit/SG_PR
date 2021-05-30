@@ -81,23 +81,23 @@ class SG(torch.nn.Module):
         xyz = x[:,:3,:] # Bx3xN
         sem = x[:,3:,:]   # BxfxN
 
-        xyz = dgcnn.get_graph_feature(xyz, self.k)    #Bx6xNxk
+        xyz = dgcnn.get_graph_feature(xyz, k=self.k, cuda=self.args.cuda)    #Bx6xNxk
         xyz = self.dgcnn_s_conv1(xyz)
         xyz1 = xyz.max(dim=-1, keepdim=False)[0]
-        xyz = dgcnn.get_graph_feature(xyz1, k=self.k)
+        xyz = dgcnn.get_graph_feature(xyz1, k=self.k, cuda=self.args.cuda)
         xyz = self.dgcnn_s_conv2(xyz)
         xyz2 = xyz.max(dim=-1, keepdim=False)[0]
-        xyz = dgcnn.get_graph_feature(xyz2, k=self.k)
+        xyz = dgcnn.get_graph_feature(xyz2, k=self.k, cuda=self.args.cuda)
         xyz = self.dgcnn_s_conv3(xyz)
         xyz3 = xyz.max(dim=-1, keepdim=False)[0]
 
-        sem = dgcnn.get_graph_feature(sem, self.k)  # Bx2fxNxk
+        sem = dgcnn.get_graph_feature(sem, k=self.k, cuda=self.args.cuda)  # Bx2fxNxk
         sem = self.dgcnn_f_conv1(sem)
         sem1 = sem.max(dim=-1, keepdim=False)[0]
-        sem = dgcnn.get_graph_feature(sem1, k=self.k)
+        sem = dgcnn.get_graph_feature(sem1, k=self.k, cuda=self.args.cuda)
         sem = self.dgcnn_f_conv2(sem)
         sem2 = sem.max(dim=-1, keepdim=False)[0]
-        sem = dgcnn.get_graph_feature(sem2, k=self.k)
+        sem = dgcnn.get_graph_feature(sem2, k=self.k, cuda=self.args.cuda)
         sem = self.dgcnn_f_conv3(sem)
         sem3 = sem.max(dim=-1, keepdim=False)[0]
 
@@ -164,7 +164,7 @@ class SGTrainer(object):
         if (not train) and self.model_pth != "":
             print("loading model: ", self.model_pth)
             # original saved file with dataparallel
-            state_dict = torch.load(self.model_pth, map_location='cuda:0') # todo
+            state_dict = torch.load(self.model_pth, map_location='cuda:'+str(self.args.gpu)) #'cuda:0'
             # create new dict that does not contain 'module'
             new_state_dict = OrderedDict()
             for k, v in state_dict.items():
