@@ -1,5 +1,6 @@
 common:
   model: "./model/model.pth" #pytorch model
+  cuda: "0" # cuda id
   batch_size: 128  #batch size
   p_thresh: 3 #distance threshold of positive sample
   graph_pairs_dir: "../SG_PR_DATA/graphs_rn" #dir contain training or testing data
@@ -20,7 +21,7 @@ train:
   learning_rate: 0.001
   weight_decay: 0.0005
   gpu: 0 #gpu id
-  logdir: "./logs" #dir to save training results
+  logdir: "./logs_k10" #dir to save training results
   node_num: 100 #if node num of a graph is less than node_num, we use zero node to pad it to node_num
 eva_batch:
   sequences: ["00",]  #list of sequences to evaluation

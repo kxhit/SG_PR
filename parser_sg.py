@@ -55,6 +55,7 @@ class sgpr_args():
         self.node_num=config_args['train']['node_num']
         #common
         self.model=config_args['common']['model']
+        self.cuda=config_args['common']['cuda']
         self.batch_size=config_args['common']['batch_size']
         self.p_thresh=config_args['common']['p_thresh']
         self.graph_pairs_dir=config_args['common']['graph_pairs_dir']
