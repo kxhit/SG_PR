@@ -104,6 +104,10 @@ Then just run:
 python eval_batch.py
 ```
 
+### Raw Data
+We provide the [raw data](https://drive.google.com/file/d/1R6d13HOtR6y2wrrXAaeXOrmJXeJfzyoq/view?usp=sharing) of the tables and curves in the paper, including compared methods M2DP, PointNetVLAD, Scan Context.
+
+We recommend users refer the work [SSC](https://github.com/lilin-hitcrt/SSC#raw-data) for a fair comparison with recent methods in the same data distribution.
 
 ## Other methods
 #### PointNetVLAD
